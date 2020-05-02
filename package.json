@@ -4,7 +4,7 @@
   "description": "Simple Promise wrapper for Express",
   "main": "index.js",
   "scripts": {
-    "test": "standard && jest"
+    "test": "standard && mocha"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,9 @@
     "express": "^4.16.4"
   },
   "devDependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "jest": "^24.5.0",
-    "standard": "^12.0.1"
+    "mocha": "^7.1.2",
+    "node-fetch": "^2.6.0",
+    "promise-the-world": "^1.0.1",
+    "standard": "^14.3.3"
   }
 }
