@@ -43,7 +43,27 @@ class ExpressAsPromise {
   }
 
   get url () {
-    return `http://${this.host}:${this.port !== 80 ? this.port : ''}/`
+    return `http://${this.host}${this.port !== 80 ? `:${this.port}` : ''}/`
+  }
+
+  static async withServer (callback) {
+    const server = new ExpressAsPromise()
+
+    let error = null
+
+    try {
+      await callback(server)
+    } catch (err) {
+      error = err
+    }
+
+    if (server.server) {
+      await server.stop()
+    }
+
+    if (error) {
+      throw error
+    }
   }
 }
 
