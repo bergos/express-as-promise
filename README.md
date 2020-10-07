@@ -17,6 +17,28 @@ The `.url` property contains a string to the base URL.
   Returns the base URL as string.
 - `async stop()`: Stops the listener. 
 
+### Static Methods
+
+- `withServer(callback)`: Creates a server instance and hands it over to an async callback function.
+  Once the callback function finished with resolve or reject, it stops the server and forwards the error if it finished with reject.
+  This method is intended for testing using a pattern like this:
+
+```javascript
+const { withServer } = require('express-as-promise')
+
+it('should handle my test case', async () => {
+  await withServer(async server => {
+    server.app.use(myMiddleware)
+
+    const url = await server.listen()
+
+    const res = await fetch(url)
+
+    strictEqual(res.status, 200)
+  })
+})
+```
+
 ### Properties 
 
 - `.app`: The actual express object.
@@ -26,7 +48,7 @@ The `.url` property contains a string to the base URL.
 
 Simple example which adds one route, starts the server, write the base URL to the console and waits 10s before it stops the server. 
 
-```
+```javascript
 const ExpressAsPromise = require('express-as-promise')
 
 async function main () {
