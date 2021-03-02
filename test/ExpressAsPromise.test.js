@@ -1,4 +1,4 @@
-const { strictEqual } = require('assert')
+const { notStrictEqual, strictEqual } = require('assert')
 const { describe, it } = require('mocha')
 const fetch = require('node-fetch')
 const { delay } = require('promise-the-world')
@@ -23,6 +23,58 @@ describe('ExpressAsPromise', () => {
       const content = await res.text()
 
       strictEqual(content, 'Hello World!')
+
+      await server.stop()
+    })
+  })
+
+  describe('.fetch', () => {
+    it('should be a method', () => {
+      const server = new ExpressAsPromise()
+
+      strictEqual(typeof server.fetch, 'function')
+    })
+
+    it('should start listening on a random port', async () => {
+      const server = new ExpressAsPromise()
+
+      await server.fetch('/')
+
+      notStrictEqual(server.server, null)
+
+      await server.stop()
+    })
+
+    it('should send a request to the path expanded with the base URL', async () => {
+      const path = '/some/path'
+      const text = 'test'
+      const server = new ExpressAsPromise()
+
+      server.app.get(path, (req, res) => {
+        res.end(text)
+      })
+
+      const res = await server.fetch('/some/path')
+      const content = await res.text()
+
+      strictEqual(content, text)
+
+      await server.stop()
+    })
+
+    it('should use the options argument', async () => {
+      const path = '/some/path'
+      const text = 'test'
+      const server = new ExpressAsPromise()
+
+      server.app.delete(path, (req, res) => {
+        res.end(text)
+      })
+
+      const res = await server.fetch('/some/path', { method: 'DELETE' })
+      const content = await res.text()
+
+      strictEqual(content, text)
 
       await server.stop()
     })
@@ -69,7 +121,7 @@ describe('ExpressAsPromise', () => {
       await server.listen()
       await server.stop()
 
-      strictEqual(server.server.listening, false)
+      strictEqual(server.server, null)
     })
   })
 
@@ -178,7 +230,7 @@ describe('ExpressAsPromise', () => {
         await instance.listen()
       })
 
-      strictEqual(instance.server.address(), null)
+      strictEqual(instance.server, null)
     })
   })
 })

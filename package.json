@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/bergos/express-as-promise",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "mocha": "^7.1.2",
-    "node-fetch": "^2.6.0",
     "promise-the-world": "^1.0.1",
     "standard": "^14.3.3"
   }
