@@ -13,6 +13,9 @@ The `.url` property contains a string to the base URL.
 
 ### Methods
 
+- `async fetch(url, options)`: Makes a request with `node-fetch` to the express server.
+  The `url` is expanded using the servers base URL.
+  If the server isn't listening yet, the server starts listening on a random port.
 - `async listen(port, host)`: Forwards the optional `port` and `host` parameters to express method.
   Returns the base URL as string.
 - `async stop()`: Stops the listener. 

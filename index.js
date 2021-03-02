@@ -1,9 +1,13 @@
 const express = require('express')
+const fetch = require('node-fetch')
 const { promisify } = require('util')
 
 class ExpressAsPromise {
   constructor () {
     this.app = express()
+    this.server = null
+
+    this._listen = null
   }
 
   async listen (port, host) {
@@ -22,6 +26,18 @@ class ExpressAsPromise {
 
   async stop () {
     await promisify(this.server.close.bind(this.server))()
+
+    this.server = null
+  }
+
+  async fetch (pathname, options) {
+    if (!this.server) {
+      await this.listen()
+    }
+
+    const fullUrl = new URL(pathname, this.url)
+
+    return fetch(fullUrl.toString(), options)
   }
 
   get host () {
