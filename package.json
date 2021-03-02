@@ -1,6 +1,6 @@
 {
   "name": "express-as-promise",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple Promise wrapper for Express",
   "main": "index.js",
   "scripts": {
