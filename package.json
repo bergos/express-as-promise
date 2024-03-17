@@ -2,13 +2,14 @@
   "name": "express-as-promise",
   "version": "1.2.0",
   "description": "Simple Promise wrapper for Express",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "standard && mocha"
+    "test": "stricter-standard && c8 --reporter=lcov --reporter=text-summary mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/bergos/express-as-promise.git"
+    "url": "https://github.com/bergos/express-as-promise.git"
   },
   "keywords": [
     "express",
@@ -21,12 +22,12 @@
   },
   "homepage": "https://github.com/bergos/express-as-promise",
   "dependencies": {
-    "express": "^4.16.4",
-    "node-fetch": "^2.6.1"
+    "express": "^4.18.3",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "mocha": "^7.1.2",
-    "promise-the-world": "^1.0.1",
-    "standard": "^14.3.3"
+    "c8": "^9.1.0",
+    "mocha": "^10.3.0",
+    "stricter-standard": "^0.3.1"
   }
 }

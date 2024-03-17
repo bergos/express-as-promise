@@ -1,4 +1,4 @@
-const { withServer } = require('..')
+import withServer from '../withServer.js'
 
 async function main () {
   await withServer(async server => {

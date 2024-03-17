@@ -1,8 +1,7 @@
-const { notStrictEqual, strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const fetch = require('node-fetch')
-const { delay } = require('promise-the-world')
-const ExpressAsPromise = require('..')
+import { notStrictEqual, strictEqual } from 'node:assert'
+import { describe, it } from 'mocha'
+import fetch from 'node-fetch'
+import ExpressAsPromise from '../index.js'
 
 describe('ExpressAsPromise', () => {
   it('should be a constructor', () => {
@@ -150,87 +149,6 @@ describe('ExpressAsPromise', () => {
       strictEqual(server.url, 'http://127.0.0.1/')
 
       await server.stop()
-    })
-  })
-
-  describe('.withServer', () => {
-    it('should be a static method', () => {
-      strictEqual(typeof ExpressAsPromise.withServer, 'function')
-    })
-
-    it('should call the given callback function', async () => {
-      let called = false
-
-      await ExpressAsPromise.withServer(() => {
-        called = true
-      })
-
-      strictEqual(called, true)
-    })
-
-    it('should wait for the callback', async () => {
-      let finish = false
-      let finished = false
-
-      ExpressAsPromise.withServer(async () => {
-        while (!finish) { // eslint-disable-line no-unmodified-loop-condition
-          await delay(1)
-        }
-      }).then(() => {
-        finished = true
-      })
-
-      strictEqual(finished, false)
-
-      finish = true
-      await delay(10)
-
-      strictEqual(finished, true)
-    })
-
-    it('should create a ExpressAsPromise object and forward it to the callback', async () => {
-      let instance = null
-
-      await ExpressAsPromise.withServer(arg => {
-        instance = arg
-      })
-
-      strictEqual(instance instanceof ExpressAsPromise, true)
-    })
-
-    it('should forward any error thrown by the callback', async () => {
-      let error = null
-
-      try {
-        await ExpressAsPromise.withServer(() => {
-          throw new Error()
-        })
-      } catch (err) {
-        error = err
-      }
-
-      strictEqual(error instanceof Error, true)
-    })
-
-    it('should create a ExpressAsPromise object and forward it to the callback', async () => {
-      let instance = null
-
-      await ExpressAsPromise.withServer(arg => {
-        instance = arg
-      })
-
-      strictEqual(instance instanceof ExpressAsPromise, true)
-    })
-
-    it('should stop the server if it was started', async () => {
-      let instance = null
-
-      await ExpressAsPromise.withServer(async arg => {
-        instance = arg
-        await instance.listen()
-      })
-
-      strictEqual(instance.server, null)
     })
   })
 })

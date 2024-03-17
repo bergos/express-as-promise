@@ -1,13 +1,11 @@
-const express = require('express')
-const fetch = require('node-fetch')
-const { promisify } = require('util')
+import { promisify } from 'node:util'
+import express from 'express'
+import fetch from 'node-fetch'
 
 class ExpressAsPromise {
   constructor () {
     this.app = express()
     this.server = null
-
-    this._listen = null
   }
 
   async listen (port, host) {
@@ -61,26 +59,6 @@ class ExpressAsPromise {
   get url () {
     return `http://${this.host}${this.port !== 80 ? `:${this.port}` : ''}/`
   }
-
-  static async withServer (callback) {
-    const server = new ExpressAsPromise()
-
-    let error = null
-
-    try {
-      await callback(server)
-    } catch (err) {
-      error = err
-    }
-
-    if (server.server) {
-      await server.stop()
-    }
-
-    if (error) {
-      throw error
-    }
-  }
 }
 
-module.exports = ExpressAsPromise
+export default ExpressAsPromise
