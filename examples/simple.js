@@ -1,4 +1,5 @@
-const ExpressAsPromise = require('..')
+import { setTimeout } from 'node:timers/promises'
+import ExpressAsPromise from '../index.js'
 
 async function main () {
   // creates a new instance which also creates an express object
@@ -12,7 +13,7 @@ async function main () {
   console.log(await server.listen())
 
   // wait 10s...
-  await (new Promise(resolve => setTimeout(resolve, 10000)))
+  await setTimeout(10000)
 
   // ...then stop the server
   await server.stop()
