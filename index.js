@@ -1,16 +1,19 @@
+import { createServer } from 'node:http'
 import { promisify } from 'node:util'
 import express from 'express'
 import fetch from 'node-fetch'
+import { WebSocketServer } from 'ws'
 
 class ExpressAsPromise {
   constructor () {
     this.app = express()
-    this.server = null
+    this.server = createServer(this.app)
+    this.wss = new WebSocketServer({ server: this.server })
   }
 
   async listen (port, host) {
     await (new Promise((resolve, reject) => {
-      this.server = this.app.listen(port, host, err => {
+      this.server.listen(port, host, err => {
         if (err) {
           return reject(err)
         }
@@ -23,13 +26,15 @@ class ExpressAsPromise {
   }
 
   async stop () {
-    await promisify(this.server.close.bind(this.server))()
+    if (!this.server.listening) {
+      return
+    }
 
-    this.server = null
+    await promisify(this.server.close.bind(this.server))()
   }
 
   async fetch (pathname, options) {
-    if (!this.server) {
+    if (!this.server.listening) {
       await this.listen()
     }
 
@@ -46,7 +51,7 @@ class ExpressAsPromise {
     }
 
     if (address.family === 'IPv6' && address.address !== '::') {
-      return address.address
+      return `[${address.address}]`
     }
 
     return 'localhost'
@@ -57,7 +62,7 @@ class ExpressAsPromise {
   }
 
   get url () {
-    return `http://${this.host}${this.port !== 80 ? `:${this.port}` : ''}/`
+    return new URL(`http://${this.host}${this.port !== 80 ? `:${this.port}` : ''}/`)
   }
 }
 

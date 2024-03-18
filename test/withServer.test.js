@@ -81,6 +81,6 @@ describe('withServer', () => {
       await instance.listen()
     })
 
-    strictEqual(instance.server, null)
+    strictEqual(instance.server.listening, false)
   })
 })
